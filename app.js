@@ -113,8 +113,16 @@ class TimerForm extends React.Component {
 }
 
 class ToggleableTimerForm extends React.Component {
+  state = {
+    isOpen: false
+  };
+
+  handleFormOpen = () => {
+    this.setState({ isOpen: true })
+  }
+
   render() {
-    const { isOpen } = this.props;
+    const { isOpen } = this.state;
 
     if( isOpen ) {
       return (
@@ -122,8 +130,8 @@ class ToggleableTimerForm extends React.Component {
       )
     } else {
       return (
-        <div className="ui basic content center aligned sement">
-          <button className="ui basic button icon">
+        <div className="ui basic content center aligned segment">
+          <button onClick={this.handleFormOpen} className="ui basic button icon">
             <i className="plus icon" />
           </button>
         </div>
