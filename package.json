@@ -1,4 +1,7 @@
 {
   "private": true,
-  "workspaces": ["@time-trackinh-app/*"]
+  "workspaces": ["packages/*"],
+  "scripts": {
+    "start": "yarn workspace @time-tracking-app/server start"
+  }
 }
