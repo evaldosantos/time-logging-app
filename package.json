@@ -1,7 +1,14 @@
 {
   "private": true,
-  "workspaces": ["packages/*"],
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
-    "start": "yarn workspace @time-logging-app/server start"
+    "start:dev:server": "yarn workspace @time-logging-app/server start",
+    "start:dev:client": "yarn workspace @time-logging-app/client start",
+    "start:dev": "concurrently 'yarn start:dev:client' 'yarn start:dev:server'"
+  },
+  "dependencies": {
+    "concurrently": "^5.2.0"
   }
 }
