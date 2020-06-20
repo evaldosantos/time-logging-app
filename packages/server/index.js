@@ -1,1 +1,1 @@
-console.log("@time-tracking-app hello!")
+console.log("@time-logging-app hello!")
