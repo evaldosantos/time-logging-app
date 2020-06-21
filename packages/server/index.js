@@ -16,7 +16,7 @@ app.get('/api/timers', async (req, res) => {
     const data = await readFile(DATA_FILE);
     res.setHeader('Cache-Control', 'no-cache');
     res.json(JSON.parse(data));
-  } catch(e) {
+  } catch (e) {
     res.status(500);
   }
 });

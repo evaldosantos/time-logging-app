@@ -5,11 +5,7 @@ function millisecondsToHuman(ms) {
   const minutes = Math.floor((ms / 1000 / 60) % 60);
   const hours = Math.floor(ms / 1000 / 60 / 60);
 
-  const humanized = [
-    pad(hours.toString(), 2),
-    pad(minutes.toString(), 2),
-    pad(seconds.toString(), 2),
-  ].join(':');
+  const humanized = [pad(hours.toString(), 2), pad(minutes.toString(), 2), pad(seconds.toString(), 2)].join(':');
 
   return humanized;
 }
@@ -29,7 +25,7 @@ helpers.newTimer = function newTimer(attrs = {}) {
   };
 
   return timer;
-}
+};
 
 helpers.renderElapsedString = function renderElapsedString(elapsed, runningSince) {
   let totalElapsed = elapsed;
@@ -37,6 +33,6 @@ helpers.renderElapsedString = function renderElapsedString(elapsed, runningSince
     totalElapsed += Date.now() - runningSince;
   }
   return millisecondsToHuman(totalElapsed);
-}
+};
 
 window.helpers = helpers;
