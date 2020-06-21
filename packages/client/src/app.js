@@ -1,3 +1,4 @@
+import './style.css';
 import './helpers';
 import * as client from './client';
 
