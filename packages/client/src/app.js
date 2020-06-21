@@ -13,7 +13,7 @@ class TimersDashboard extends React.Component {
   }
 
   loadTimersFromServer = () => {
-    client.getTimers((serverTimes) => {
+    client.getTimers(null, (serverTimes) => {
       this.setState({
         timers: serverTimes,
       });
@@ -42,6 +42,9 @@ class TimersDashboard extends React.Component {
 
   createTimer = (timer) => {
     const t = helpers.newTimer(timer);
+
+    client.createTimer(t);
+
     this.setState({
       timers: this.state.timers.concat(t),
     });
@@ -52,6 +55,8 @@ class TimersDashboard extends React.Component {
 
     const nextTimers = timers.map((timer) => (timer.id !== attrs.id ? timer : { ...timer, ...attrs }));
 
+    client.updateTimer(attrs);
+
     this.setState({
       timers: nextTimers,
     });
@@ -60,6 +65,8 @@ class TimersDashboard extends React.Component {
   deleteTimer = (timerId) => {
     const { timers } = this.state;
     const nextTimers = timers.filter((timer) => timer.id !== timerId);
+
+    client.deleteTimer({ id: timerId });
 
     this.setState({
       timers: nextTimers,
@@ -71,6 +78,8 @@ class TimersDashboard extends React.Component {
     const { timers } = this.state;
 
     const nextTimers = timers.map((timer) => (timer.id !== timerId ? timer : { ...timer, runningSince: now }));
+
+    client.startTimer({ id: timerId, start: now });
 
     this.setState({
       timers: nextTimers,
@@ -90,6 +99,8 @@ class TimersDashboard extends React.Component {
             elapsed: timer.elapsed + (now - timer.runningSince),
           }
     );
+
+    client.stopTimer({ id: timerId, stop: now });
 
     this.setState({
       timers: nextTimers,
