@@ -20,7 +20,7 @@ app.set('port', process.env.PORT || 3000);
 app.get('/api/timers', async (req, res) => {
   try {
     const data = await readFile(DATA_FILE);
-    res.setHeader('Cache-Control', 'no-cache');
+
     res.json(JSON.parse(data));
   } catch (e) {
     res.status(500);
@@ -36,7 +36,33 @@ app.post('/api/timers/start', async (req, res) => {
 
     const newTimers = timers.map((timer) => (timer.id !== id ? timer : { ...timer, runningSince: start }));
 
-    writeFile(DATA_FILE, JSON.stringify(newTimers, null, 4));
+    await writeFile(DATA_FILE, JSON.stringify(newTimers, null, 4));
+
+    res.json(newTimers);
+  } catch (e) {
+    res.status(500);
+  }
+});
+
+app.post('/api/timers/stop', async (req, res) => {
+  try {
+    const { id, stop } = req.body;
+    const data = await readFile(DATA_FILE);
+    const timers = JSON.parse(data);
+
+    const newTimers = timers.map((timer) =>
+      timer.id !== id
+        ? timer
+        : {
+            ...timer,
+            ...{
+              elapsed: timer.elapsed + (stop - timer.runningSince),
+              runningSince: null,
+            },
+          }
+    );
+
+    await writeFile(DATA_FILE, JSON.stringify(newTimers, null, 4));
 
     res.json(newTimers);
   } catch (e) {

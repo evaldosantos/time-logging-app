@@ -91,8 +91,10 @@ class TimersDashboard extends React.Component {
           }
     );
 
-    this.setState({
-      timers: nextTimers,
+    client.stopTimer({ id: timerId, stop: now }, (timers) => {
+      this.setState({
+        timers,
+      });
     });
   };
 
