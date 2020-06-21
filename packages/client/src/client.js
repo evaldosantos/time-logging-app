@@ -41,3 +41,4 @@ export const stopTimer = xFetch('http://localhost:3000/api/timers/stop', { metho
 
 export const createTimer = xFetch('http://localhost:3000/api/timers', { method: 'post' });
 export const updateTimer = xFetch('http://localhost:3000/api/timers', { method: 'put' });
+export const deleteTimer = xFetch('http://localhost:3000/api/timers', { method: 'delete' });

@@ -66,6 +66,8 @@ class TimersDashboard extends React.Component {
     const { timers } = this.state;
     const nextTimers = timers.filter((timer) => timer.id !== timerId);
 
+    client.deleteTimer({ id: timerId });
+
     this.setState({
       timers: nextTimers,
     });
