@@ -27,6 +27,30 @@ app.get('/api/timers', async (req, res) => {
   }
 });
 
+app.post('/api/timers', async (req, res) => {
+  try {
+    const data = await readFile(DATA_FILE);
+    const timers = JSON.parse(data);
+
+    const { title, project, id } = req.body;
+    const newTimer = {
+      title,
+      project,
+      id,
+      elapsed: 0,
+      runningSince: null,
+    };
+
+    const newTimers = [...timers, newTimer];
+
+    await writeFile(DATA_FILE, JSON.stringify(newTimers, null, 4));
+
+    res.json(newTimers);
+  } catch (e) {
+    res.status(500);
+  }
+});
+
 app.post('/api/timers/start', async (req, res) => {
   try {
     const { id, start } = req.body;

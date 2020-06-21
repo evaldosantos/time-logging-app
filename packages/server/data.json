@@ -19,5 +19,12 @@
         "id": "2c43306e-5b44-4ff8-8753-33c35adbd06f",
         "elapsed": 11750,
         "runningSince": 1456225941911
+    },
+    {
+        "title": "Timer",
+        "project": "Project",
+        "id": "d2fd6dad-643d-476a-84f9-df7b86ef34c5",
+        "elapsed": 0,
+        "runningSince": null
     }
 ]

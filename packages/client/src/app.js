@@ -42,6 +42,9 @@ class TimersDashboard extends React.Component {
 
   createTimer = (timer) => {
     const t = helpers.newTimer(timer);
+
+    client.createTimer(t);
+
     this.setState({
       timers: this.state.timers.concat(t),
     });
