@@ -4,11 +4,17 @@
     "packages/*"
   ],
   "scripts": {
+    "format": "prettier --write",
     "start:dev:server": "yarn workspace @time-logging-app/server start",
     "start:dev:client": "yarn workspace @time-logging-app/client start",
     "start:dev": "concurrently 'yarn start:dev:client' 'yarn start:dev:server'"
   },
   "dependencies": {
     "concurrently": "^5.2.0"
+  },
+  "devDependencies": {
+    "husky": "4.2.5",
+    "lint-staged": "10.2.11",
+    "prettier": "2.0.5"
   }
 }
