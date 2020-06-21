@@ -13,7 +13,7 @@ class TimersDashboard extends React.Component {
   }
 
   loadTimersFromServer = () => {
-    client.getTimers((serverTimes) => {
+    client.getTimers(null, (serverTimes) => {
       this.setState({
         timers: serverTimes,
       });
@@ -54,6 +54,8 @@ class TimersDashboard extends React.Component {
     const { timers } = this.state;
 
     const nextTimers = timers.map((timer) => (timer.id !== attrs.id ? timer : { ...timer, ...attrs }));
+
+    client.updateTimer(attrs);
 
     this.setState({
       timers: nextTimers,
