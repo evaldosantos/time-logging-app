@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
 const util = require('util');
@@ -9,6 +10,7 @@ const app = express();
 
 const DATA_FILE = path.join(__dirname, 'data.json');
 
+app.use(cors());
 app.set('port', process.env.PORT || 3000);
 
 app.get('/api/timers', async (req, res) => {
