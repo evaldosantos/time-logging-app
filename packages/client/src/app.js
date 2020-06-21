@@ -1,3 +1,5 @@
+import './helpers';
+
 class TimersDashboard extends React.Component {
   state = {
     timers: [
