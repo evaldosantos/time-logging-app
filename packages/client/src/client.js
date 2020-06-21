@@ -16,3 +16,13 @@ function parseJSON(response) {
 
 export const getTimers = (success) =>
   fetch('http://localhost:3000/api/timers').then(checkStatus).then(parseJSON).then(success);
+
+export const startTimer = (data) =>
+  fetch('http://localhost:3000/api/start', {
+    method: 'post',
+    body: JSON.stringify(data),
+    header: {
+      Accept: 'application/json',
+      'Content-type': 'application/json',
+    },
+  }).then(checkStatus);

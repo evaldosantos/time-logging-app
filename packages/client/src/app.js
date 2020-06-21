@@ -72,8 +72,10 @@ class TimersDashboard extends React.Component {
 
     const nextTimers = timers.map((timer) => (timer.id !== timerId ? timer : { ...timer, runningSince: now }));
 
-    this.setState({
-      timers: nextTimers,
+    client.startTimer({ id: timerId, start: now }).then(() => {
+      this.setState({
+        timers: nextTimers,
+      });
     });
   };
 
