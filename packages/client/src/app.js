@@ -70,10 +70,12 @@ class TimersDashboard extends React.Component {
     const now = Date.now();
     const { timers } = this.state;
 
-    client.startTimer({ id: timerId, start: now }, (timers) => {
-      this.setState({
-        timers,
-      });
+    const nextTimers = timers.map((timer) => (timer.id !== timerId ? timer : { ...timer, runningSince: now }));
+
+    client.startTimer({ id: timerId, start: now });
+
+    this.setState({
+      timers: nextTimers,
     });
   };
 
@@ -91,10 +93,10 @@ class TimersDashboard extends React.Component {
           }
     );
 
-    client.stopTimer({ id: timerId, stop: now }, (timers) => {
-      this.setState({
-        timers,
-      });
+    client.stopTimer({ id: timerId, stop: now });
+
+    this.setState({
+      timers: nextTimers,
     });
   };
 

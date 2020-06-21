@@ -38,7 +38,7 @@ app.post('/api/timers/start', async (req, res) => {
 
     await writeFile(DATA_FILE, JSON.stringify(newTimers, null, 4));
 
-    res.json(newTimers);
+    res.json({});
   } catch (e) {
     res.status(500);
   }
@@ -64,7 +64,7 @@ app.post('/api/timers/stop', async (req, res) => {
 
     await writeFile(DATA_FILE, JSON.stringify(newTimers, null, 4));
 
-    res.json(newTimers);
+    res.json({});
   } catch (e) {
     res.status(500);
   }
