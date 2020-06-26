@@ -1,13 +1,10 @@
 const fs = require('fs');
+const util = require('util');
 
 const readFile = util.promisify(fs.readFile);
-const riteFile = util.promisify(fs.writeFile);
+const writeFile = util.promisify(fs.writeFile);
 
-class FileService {
-  static instance;
-
-  static getInstance = (path) => (FileService.instance = FileService.instance || new FileService(path));
-
+class FileStrategy {
   constructor(path) {
     this.path = path;
   }
@@ -26,6 +23,21 @@ class FileService {
   writeTimers = async (timers) => {
     try {
       await writeFile(this.path, JSON.stringify(timers, null, 4));
+    } catch (e) {
+      throw e;
+    }
+  };
+
+  getTimer = async (id) => {
+    try {
+      const data = await this.readTimers();
+      const timer = data.find((t) => t.id === id);
+
+      if (!timer) {
+        throw new Error('Timer not found');
+      }
+
+      return timer;
     } catch (e) {
       throw e;
     }
@@ -57,7 +69,7 @@ class FileService {
       const timers = await this.getTimers();
 
       const newTimers = timers.map((timer) =>
-        timer.id !== id
+        timer.id !== updatedTimer.id
           ? timer
           : {
               ...timer,
@@ -83,3 +95,5 @@ class FileService {
     }
   };
 }
+
+module.exports = FileStrategy;

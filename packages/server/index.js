@@ -4,13 +4,14 @@ const fs = require('fs');
 const path = require('path');
 const util = require('util');
 const bodyParser = require('body-parser');
+const storageService = require('./src/service/storage');
 
 const readFile = util.promisify(fs.readFile);
 const writeFile = util.promisify(fs.writeFile);
 
 const app = express();
 
-const DATA_FILE = path.join(__dirname, 'data.json');
+const DATA_FILE = path.join(__dirname, '..', '..', '..', 'data.json');
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -19,9 +20,9 @@ app.set('port', process.env.PORT || 3000);
 
 app.get('/api/timers', async (req, res) => {
   try {
-    const data = await readFile(DATA_FILE);
+    const data = await storageService.getTimers();
 
-    res.json(JSON.parse(data));
+    res.json(data);
   } catch (e) {
     res.status(500);
   }
@@ -29,9 +30,6 @@ app.get('/api/timers', async (req, res) => {
 
 app.post('/api/timers', async (req, res) => {
   try {
-    const data = await readFile(DATA_FILE);
-    const timers = JSON.parse(data);
-
     const { title, project, id } = req.body;
     const newTimer = {
       title,
@@ -41,11 +39,9 @@ app.post('/api/timers', async (req, res) => {
       runningSince: null,
     };
 
-    const newTimers = [...timers, newTimer];
+    await storageService.addTimer(newTimer);
 
-    await writeFile(DATA_FILE, JSON.stringify(newTimers, null, 4));
-
-    res.json(newTimers);
+    res.json(newTimer);
   } catch (e) {
     res.status(500);
   }
@@ -55,22 +51,17 @@ app.put('/api/timers', async (req, res) => {
   try {
     const { id, title, project } = req.body;
 
-    const data = await readFile(DATA_FILE);
-    const timers = JSON.parse(data);
+    const timer = await storageService.getTimer(id);
 
-    const newTimers = timers.map((timer) =>
-      timer.id !== id
-        ? timer
-        : {
-            ...timer,
-            title,
-            project,
-          }
-    );
+    const newTimer = {
+      ...timer,
+      title,
+      project,
+    };
 
-    await writeFile(DATA_FILE, JSON.stringify(newTimers, null, 4));
+    await storageService.updateTimer(newTimer);
 
-    res.json({});
+    res.json(newTimer);
   } catch (e) {
     res.status(500);
   }
@@ -80,14 +71,16 @@ app.post('/api/timers/start', async (req, res) => {
   try {
     const { id, start } = req.body;
 
-    const data = await readFile(DATA_FILE);
-    const timers = JSON.parse(data);
+    const timer = await storageService.getTimer(id);
 
-    const newTimers = timers.map((timer) => (timer.id !== id ? timer : { ...timer, runningSince: start }));
+    const newTimer = {
+      ...timer,
+      runningSince: start,
+    };
 
-    await writeFile(DATA_FILE, JSON.stringify(newTimers, null, 4));
+    await storageService.updateTimer(newTimer);
 
-    res.json({});
+    res.json(newTimer);
   } catch (e) {
     res.status(500);
   }
@@ -96,24 +89,18 @@ app.post('/api/timers/start', async (req, res) => {
 app.post('/api/timers/stop', async (req, res) => {
   try {
     const { id, stop } = req.body;
-    const data = await readFile(DATA_FILE);
-    const timers = JSON.parse(data);
 
-    const newTimers = timers.map((timer) =>
-      timer.id !== id
-        ? timer
-        : {
-            ...timer,
-            ...{
-              elapsed: timer.elapsed + (stop - timer.runningSince),
-              runningSince: null,
-            },
-          }
-    );
+    const timer = await storageService.getTimer(id);
 
-    await writeFile(DATA_FILE, JSON.stringify(newTimers, null, 4));
+    const newTimer = {
+      ...timer,
+      elapsed: timer.elapsed + (stop - timer.runningSince),
+      runningSince: null,
+    };
 
-    res.json({});
+    await storageService.updateTimer(newTimer);
+
+    res.json(newTimer);
   } catch (e) {
     res.status(500);
   }
@@ -122,14 +109,11 @@ app.post('/api/timers/stop', async (req, res) => {
 app.delete('/api/timers', async (req, res) => {
   try {
     const { id } = req.body;
-    const data = await readFile(DATA_FILE);
-    let timers = JSON.parse(data);
+    const timer = { id };
 
-    const newTimers = timers.filter((timer) => timer.id !== id);
+    await storageService.deleteTimer(timer);
 
-    await writeFile(DATA_FILE, JSON.stringify(newTimers, null, 4));
-
-    res.json({});
+    res.json();
   } catch (e) {
     res.status(500);
   }
