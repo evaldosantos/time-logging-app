@@ -1,17 +1,9 @@
 const express = require('express');
 const cors = require('cors');
-const fs = require('fs');
-const path = require('path');
-const util = require('util');
 const bodyParser = require('body-parser');
 const storageService = require('./src/service/storage');
 
-const readFile = util.promisify(fs.readFile);
-const writeFile = util.promisify(fs.writeFile);
-
 const app = express();
-
-const DATA_FILE = path.join(__dirname, '..', '..', '..', 'data.json');
 
 app.use(cors());
 app.use(bodyParser.json());
